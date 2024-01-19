@@ -6,8 +6,8 @@ import numpy as np
 from OCC.Core.BRepCheck import BRepCheck_Analyzer
 from OCC.Extend.DataExchange import read_step_file, write_step_file
 import argparse
-import sys
-sys.path.append("..")
+# import sys
+# sys.path.append("..")
 from cadlib.extrude import CADSequence
 from cadlib.visualize import vec2CADsolid, create_CAD
 from file_utils import ensure_dir
