@@ -5,6 +5,10 @@ python test.py --exp_name pretrained --mode dec --ckpt 1000 --z_path proj_log/pr
 
 python utils/export2step.py --src /home/rodney/DeepCAD/proj_log/pretrained/lgan_1000/results/fake_z_ckpt200000_num10_dec
 
+docker build -t deepcad .
+
+// To run bash inside container do this
+docker run --rm -it --entrypoint bash deepcad
 
 ## Additional packages that need to be installed
 
