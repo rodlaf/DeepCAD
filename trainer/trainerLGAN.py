@@ -26,8 +26,10 @@ class TrainerLatentWGAN(BaseTrainer):
         self.set_optimizer(cfg)
 
     def build_net(self, cfg):
-        self.netD = Discriminator(cfg.h_dim, cfg.z_dim).cuda()
-        self.netG = Generator(cfg.n_dim, cfg.h_dim, cfg.z_dim).cuda()
+        # self.netD = Discriminator(cfg.h_dim, cfg.z_dim).cuda()
+        # self.netG = Generator(cfg.n_dim, cfg.h_dim, cfg.z_dim).cuda()
+        self.netD = Discriminator(cfg.h_dim, cfg.z_dim)
+        self.netG = Generator(cfg.n_dim, cfg.h_dim, cfg.z_dim)
 
     def eval(self):
         self.netD.eval()
@@ -64,7 +66,9 @@ class TrainerLatentWGAN(BaseTrainer):
         if not os.path.exists(load_path):
             raise ValueError("Checkpoint {} not exists.".format(load_path))
 
-        checkpoint = torch.load(load_path)
+        # checkpoint = torch.load(load_path)
+        checkpoint = torch.load(load_path, map_location=torch.device('cpu'))
+
         print("Loading checkpoint from {} ...".format(load_path))
         self.netG.load_state_dict(checkpoint['netG_state_dict'])
         self.netD.load_state_dict(checkpoint['netD_state_dict'])
@@ -187,7 +191,8 @@ class TrainerLatentWGAN(BaseTrainer):
             print("chunk {} finished.".format(i))
 
         remains = n_samples - self.batch_size * chunk_num
-        noise = torch.randn(remains, self.n_dim).cuda()
+        # noise = torch.randn(remains, self.n_dim).cuda()
+        noise = torch.randn(remains, self.n_dim)
         with torch.no_grad():
             fake = self.netG(noise)
             G_score = self.netD(fake)

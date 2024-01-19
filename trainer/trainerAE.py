@@ -10,7 +10,8 @@ from cadlib.macro import *
 
 class TrainerAE(BaseTrainer):
     def build_net(self, cfg):
-        self.net = CADTransformer(cfg).cuda()
+        # self.net = CADTransformer(cfg).cuda()
+        self.net = CADTransformer(cfg)
 
     def set_optimizer(self, cfg):
         """set optimizer and lr scheduler used in training"""
@@ -18,7 +19,9 @@ class TrainerAE(BaseTrainer):
         self.scheduler = GradualWarmupScheduler(self.optimizer, 1.0, cfg.warmup_step)
 
     def set_loss_function(self):
-        self.loss_func = CADLoss(self.cfg).cuda()
+        # self.loss_func = CADLoss(self.cfg).cuda()
+        self.loss_func = CADLoss(self.cfg)
+
 
     def forward(self, data):
         commands = data['command'].cuda() # (N, S)
@@ -49,7 +52,8 @@ class TrainerAE(BaseTrainer):
         out_command = torch.argmax(torch.softmax(outputs['command_logits'], dim=-1), dim=-1)  # (N, S)
         out_args = torch.argmax(torch.softmax(outputs['args_logits'], dim=-1), dim=-1) - 1  # (N, S, N_ARGS)
         if refill_pad: # fill all unused element to -1
-            mask = ~torch.tensor(CMD_ARGS_MASK).bool().cuda()[out_command.long()]
+            # mask = ~torch.tensor(CMD_ARGS_MASK).bool().cuda()[out_command.long()]
+            mask = ~torch.tensor(CMD_ARGS_MASK).bool()[out_command.long()]
             out_args[mask] = -1
 
         out_cad_vec = torch.cat([out_command.unsqueeze(-1), out_args], dim=-1)
