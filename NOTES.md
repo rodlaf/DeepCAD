@@ -1,4 +1,3 @@
-
 python lgan.py --exp_name pretrained --ae_ckpt 1000 --ckpt 200000 --test --n_samples 10 -g 0
 
 python test.py --exp_name pretrained --mode dec --ckpt 1000 --z_path proj_log/pretrained/lgan_1000/results/fake_z_ckpt200000_num10.h5 -g 0
@@ -7,6 +6,8 @@ python utils/export2step.py --src /home/rodney/DeepCAD/proj_log/pretrained/lgan_
 
 docker build -t deepcad .
 
+// To simply run container and delete afterwards
+docker run --rm deepcad
 // To run bash inside container do this
 docker run --rm -it --entrypoint bash deepcad
 
@@ -19,3 +20,6 @@ docker run --rm -it --entrypoint bash deepcad
 
 * sort out pyproject.toml (put all requirements.txt stuff in there)
 * upload pretrained model weights somewhere I own
+* add docker ignore
+* make separate inference and training dockerfiles and move them into docker directory
+* use poetry (?)
